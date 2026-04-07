@@ -233,10 +233,10 @@
           <div class="titlebar"><strong>일마감 등록</strong></div>
           <div class="form-grid">
             <div class="form-group"><label>날짜</label><input type="date" id="c_date"></div>
-            <div class="form-group"><label>총매출</label><input id="c_total" inputmode="numeric"></div>
-            <div class="form-group"><label>현금매출</label><input id="c_cash" inputmode="numeric"></div>
-            <div class="form-group"><label>카드매출</label><input id="c_card" inputmode="numeric"></div>
-            <div class="form-group"><label>기타매출</label><input id="c_other" inputmode="numeric"></div>
+            <div class="form-group"><label>총매출(자동계산)</label><input id="c_total" inputmode="numeric" readonly style="background:#f8fafc"></div>
+            <div class="form-group"><label>현금매출</label><input id="c_cash" inputmode="numeric" oninput="syncClosingTotal()"></div>
+            <div class="form-group"><label>카드매출</label><input id="c_card" inputmode="numeric" oninput="syncClosingTotal()"></div>
+            <div class="form-group"><label>기타매출</label><input id="c_other" inputmode="numeric" oninput="syncClosingTotal()"></div>
             <div class="form-group"><label>실현금</label><input id="c_actual" inputmode="numeric"></div>
             <div class="form-group"><label>메모</label><textarea id="c_note"></textarea></div>
             <button class="btn" onclick="addClosing()">일마감 등록</button>
@@ -284,7 +284,7 @@
         <div class="card"><div class="titlebar"><strong>일별 매출 그래프</strong></div><canvas id="dailyCanvas" width="520" height="270"></canvas></div>
         <div class="card"><div class="titlebar"><strong>최근 6개월 월별 매출/폐기손실</strong></div><canvas id="monthlyCanvas" width="520" height="270"></canvas></div>
       </div>
-      <div class="grid2equal" style="margin-top:14px">
+      <div class="row" style="margin-top:14px">
         <div class="card"><div class="titlebar"><strong>상품별 매출/이익</strong></div><div class="tablewrap" id="productProfitTable"></div></div>
         <div class="card"><div class="titlebar"><strong>지출 내역 요약</strong></div><div class="tablewrap" id="monthlyExpenseTable"></div></div>
       </div>
@@ -487,7 +487,8 @@ function addExpense(){
   data.expenses.unshift(e); save(); clearFields(['e_vendor','e_amount','e_memo']); document.getElementById('e_date').value=todayStr(); renderAll();
 }
 function addClosing(){
-  const c={id:uid(),date:val('c_date'),totalSales:num(val('c_total')),cashSales:num(val('c_cash')),cardSales:num(val('c_card')),otherSales:num(val('c_other')),actualCash:num(val('c_actual')),note:val('c_note').trim()};
+  const totalSales=num(val('c_cash'))+num(val('c_card'))+num(val('c_other'));
+  const c={id:uid(),date:val('c_date'),totalSales,cashSales:num(val('c_cash')),cardSales:num(val('c_card')),otherSales:num(val('c_other')),actualCash:num(val('c_actual')),note:val('c_note').trim()};
   if(!c.date){ alert('날짜를 입력해주세요.'); return; }
   c.expectedCash=c.cashSales; c.cashDiff=c.actualCash-c.expectedCash;
   data.dailyClosings.unshift(c); save(); clearFields(['c_total','c_cash','c_card','c_other','c_actual','c_note']); document.getElementById('c_date').value=todayStr(); renderAll();
@@ -496,6 +497,11 @@ function addTheft(){
   const t={id:uid(),date:val('t_date'),category:val('t_category').trim()||'절도',lossAmount:num(val('t_amount')),note:val('t_note').trim()};
   if(!t.date || t.lossAmount<=0){ alert('날짜와 손실금액을 입력해주세요.'); return; }
   data.thefts.unshift(t); save(); clearFields(['t_amount','t_note']); document.getElementById('t_date').value=todayStr(); renderAll();
+}
+function syncClosingTotal(){
+  const total=num(val('c_cash'))+num(val('c_card'))+num(val('c_other'));
+  const el=document.getElementById('c_total');
+  if(el) el.value=String(total || 0);
 }
 function removeItem(key,id){ data[key]=data[key].filter(x=>x.id!==id); save(); renderAll(); }
 function table(headers, rows){ return `<table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>`; }
@@ -825,7 +831,7 @@ function downloadTemplate(type){
   download(`${type}_template.csv`, toCSV(templates[type]), 'text/csv;charset=utf-8');
 }
 
-setDefaults(); setupTabs(); renderAll();
+setDefaults(); setupTabs(); renderAll(); syncClosingTotal();
 </script>
 </body>
 </html>
