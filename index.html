@@ -3,41 +3,41 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>무인아이스크림 재고·발주·손익 관리 데모 v5</title>
+<title>무인아이스크림 사장님 운영 대시보드 v6</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <style>
   :root{
-    --bg:#f8fafc; --card:#ffffff; --line:#e2e8f0; --text:#0f172a; --muted:#64748b;
-    --primary:#0f172a; --soft:#f1f5f9; --danger:#dc2626; --warn:#ea580c; --success:#166534;
-    --shadow:0 8px 24px rgba(15,23,42,.05);
+    --bg:#edf3ff; --card:#ffffff; --line:#dde6f3; --text:#142033; --muted:#5b6677;
+    --primary:#1f4fd8; --primary-dark:#1237a2; --teal:#11b7a3; --orange:#ef9a22; --danger:#e05443; --warn:#ef9a22; --success:#16a34a; --soft:#f4f7fb;
+    --shadow:0 16px 40px rgba(15,23,42,.08);
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:linear-gradient(180deg,#f8fafc 0%,#f1f5f9 100%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Pretendard,sans-serif}
+  html,body{margin:0;padding:0;background:radial-gradient(circle at top left,#edf3ff 0%,#f7f9fd 45%,#fff8ef 100%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Pretendard,sans-serif}
   body{padding-bottom:36px}
-  .wrap{max-width:1240px;margin:0 auto;padding:14px}
-  .hero{display:flex;gap:12px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;margin-bottom:14px}
-  .hero h1{font-size:30px;line-height:1.2;margin:0 0 8px}
-  .hero p{margin:0;color:var(--muted);font-size:14px}
+  .wrap{max-width:1320px;margin:0 auto;padding:18px}
+  .hero{display:flex;gap:16px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;margin-bottom:18px;padding:18px 20px;border:1px solid rgba(255,255,255,.8);border-radius:30px;background:linear-gradient(135deg,rgba(31,79,216,.10),rgba(17,183,163,.08),rgba(239,154,34,.08));box-shadow:var(--shadow);backdrop-filter:blur(10px)}
+  .hero h1{font-size:32px;line-height:1.15;margin:0 0 8px;font-weight:800}
+  .hero p{margin:0;color:var(--muted);font-size:14px;max-width:640px}
   .toolbar{display:flex;gap:8px;flex-wrap:wrap}
   .btn,input,select,textarea{font:inherit}
-  .btn{border:none;background:var(--primary);color:#fff;border-radius:14px;padding:11px 14px;cursor:pointer;transition:.18s transform,.18s opacity,.18s background;box-shadow:var(--shadow)}
+  .btn{border:none;background:var(--primary);color:#fff;border-radius:16px;padding:12px 15px;cursor:pointer;transition:.18s transform,.18s opacity,.18s background,.18s box-shadow;box-shadow:0 10px 24px rgba(31,79,216,.16);font-weight:700}
   .btn:hover{transform:translateY(-1px)}
-  .btn.secondary{background:#fff;color:var(--text);border:1px solid var(--line);box-shadow:none}
-  .btn.soft{background:var(--soft);color:var(--text);box-shadow:none}
+  .btn.secondary{background:rgba(255,255,255,.95);color:var(--text);border:1px solid var(--line);box-shadow:none}
+  .btn.soft{background:var(--soft);color:var(--text);box-shadow:none;border:1px solid var(--line)}
   .btn.danger{background:var(--danger)}
-  .btn.success{background:var(--success)}
+  .btn.success{background:var(--teal)}
   label.filebtn{display:inline-flex;align-items:center;gap:8px}
-  .cards{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));margin:12px 0 14px}
-  .card{background:rgba(255,255,255,.92);backdrop-filter:saturate(140%) blur(10px);border:1px solid rgba(226,232,240,.95);border-radius:22px;padding:16px;box-shadow:var(--shadow)}
+  .cards{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin:14px 0 16px}
+  .card{background:rgba(255,255,255,.90);backdrop-filter:saturate(140%) blur(10px);border:1px solid rgba(255,255,255,.85);border-radius:28px;padding:18px;box-shadow:var(--shadow)}
   .card h3{font-size:12px;color:var(--muted);margin:0 0 8px;font-weight:700;letter-spacing:.02em}
-  .value{font-size:25px;font-weight:800;line-height:1.2}
+  .value{font-size:27px;font-weight:800;line-height:1.15}
   .row{display:grid;gap:14px}
   .grid2{display:grid;grid-template-columns:380px 1fr;gap:14px}
   .grid2equal{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .tabs{display:flex;gap:8px;overflow:auto;padding:2px 2px 6px;margin:12px 0;scrollbar-width:none}
+  .tabs{display:flex;gap:10px;overflow:auto;padding:4px 4px 8px;margin:14px 0;scrollbar-width:none}
   .tabs::-webkit-scrollbar{display:none}
-  .tab{border:1px solid var(--line);background:rgba(255,255,255,.85);border-radius:999px;padding:10px 14px;cursor:pointer;white-space:nowrap;font-weight:700;color:var(--muted)}
-  .tab.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:var(--shadow)}
+  .tab{border:1px solid rgba(255,255,255,.85);background:rgba(255,255,255,.88);border-radius:18px;padding:12px 16px;cursor:pointer;white-space:nowrap;font-weight:800;color:var(--muted);box-shadow:0 8px 20px rgba(15,23,42,.04)}
+  .tab.active{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border-color:transparent;box-shadow:0 12px 28px rgba(31,79,216,.22)}
   .section{display:none}
   .section.active{display:block}
   .titlebar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
@@ -101,14 +101,34 @@
   .icon-pencil:before{content:'';position:absolute;left:1px;top:7px;width:11px;height:3px;background:currentColor;transform:rotate(-35deg);border-radius:2px}
   .icon-pencil:after{content:'';position:absolute;left:10px;top:2px;width:0;height:0;border-left:4px solid currentColor;border-top:3px solid transparent;border-bottom:3px solid transparent;transform:rotate(-35deg)}
 
+
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.9);border-radius:999px;font-size:12px;font-weight:800;color:#334155;margin-bottom:10px;box-shadow:0 8px 20px rgba(15,23,42,.04)}
+  .hero-icon{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:20px;background:linear-gradient(135deg,#1f4fd8,#11b7a3);color:#fff;font-weight:900;font-size:24px;box-shadow:0 12px 28px rgba(31,79,216,.18)}
+  .summary-note{font-size:12px;color:var(--muted);margin-top:6px}
+  .card:nth-child(1) .value,.card:nth-child(5) .value{color:#1f4fd8}
+  .card:nth-child(6) .value{color:#16a34a}
+  .item{border:1px solid #eef2f7;border-radius:18px;background:linear-gradient(180deg,#fff,#f8fbff)}
+  .tablewrap{overflow:auto;border-radius:20px;border:1px solid var(--line);background:#fff}
+  table{min-width:760px;background:#fff}
+  th{background:linear-gradient(180deg,#1f2937,#273548);color:#fff;font-size:13px}
+  .sticky-actions .inner{background:rgba(255,255,255,.94);border:1px solid rgba(255,255,255,.88);box-shadow:var(--shadow)}
+  @media (max-width:640px){
+    .hero{padding:16px}
+    .hero h1{font-size:24px}
+    .cards{grid-template-columns:1fr 1fr}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="hero">
-    <div>
-      <h1>무인아이스크림 재고·발주·손익 관리 데모 v5</h1>
-      <p>직접 입력, 엑셀/CSV 업로드, 자동 매핑, 모바일 테스트까지 가능한 독립 실행형 페이지입니다.</p>
+    <div style="display:flex;gap:16px;align-items:flex-start">
+      <div class="hero-icon">🏪</div>
+      <div>
+        <div class="hero-badge">사장님 운영 대시보드 · POS + 분석형 샘플</div>
+        <h1>무인아이스크림 사장님 운영 대시보드 v6</h1>
+        <p>직관적인 POS 느낌과 부드러운 분석 대시보드를 섞어, 30~50대 사장님이 보기 쉽고 누르기 쉬운 화면으로 다듬은 GitHub Pages용 버전입니다.</p>
+      </div>
     </div>
     <div class="toolbar">
       <button class="btn secondary" onclick="downloadBackup()">전체 백업</button>
@@ -120,7 +140,7 @@
     </div>
   </div>
 
-  <div id="importMessage"></div>
+  <div id="importMessage"></div><div class="summary-note">현재 사용 중인 데이터는 기존 앱에서 <b>전체 백업(JSON)</b> 후, 새 버전에서 <b>백업 불러오기</b>로 옮겨주세요.</div>
   <div class="cards" id="summaryCards"></div>
   <div class="split" id="alertsRow"></div>
   <div class="tabs" id="tabs"></div>
