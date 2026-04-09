@@ -1,35 +1,27 @@
-# 무인아이스크림 관리 앱 - GitHub 업로드용
+# 무인아이스크림 관리 앱 - GitHub Pages 실행판
 
-이 ZIP은 GitHub 저장소에 바로 업로드할 수 있는 **React/Vite 프로젝트 뼈대 + 최신 기능 스냅샷**입니다.
+이 ZIP은 GitHub Pages에 바로 올려서 실행할 수 있는 정적 HTML 버전입니다.
 
-## 포함
-- `src/App.jsx` : 최신 기능 기준 앱 소스 스냅샷
-- `package.json`
-- `vite.config.js`
-- `index.html`
+포함 파일
+- index.html
+- .nojekyll
+- README.md
 
-## 중요
-- 현재까지 입력한 실제 데이터는 브라우저 localStorage에 저장되어 있으므로 이 ZIP에 자동 포함되지 않습니다.
-- 기존 앱에서 **전체 백업(JSON)** 후 새 버전에서 **백업 불러오기**로 옮겨주세요.
-
-## GitHub 업로드
+## 업로드 방법
 1. ZIP 압축 해제
-2. GitHub 새 저장소 또는 기존 저장소 열기
-3. 파일 전체 업로드
-4. `Commit changes`
+2. GitHub 저장소 열기
+3. Add file → Upload files
+4. index.html / .nojekyll / README.md 업로드
+5. Commit changes
+6. Settings → Pages → Deploy from a branch → main / root → Save
 
-## 배포
-이 프로젝트는 Vite 기반이라 GitHub Pages에서 바로 정적 HTML처럼 열리는 구조는 아닙니다.
-빌드 후 배포하거나, Vercel/Netlify에 연결해 배포하는 방식이 적합합니다.
+## 사이트 주소
+보통 아래 형태입니다.
+https://사용자이름.github.io/저장소이름/
 
-## 이번까지 반영된 핵심 기능
-- 발주 / 입고 / 출고 / 현재고 / 지출 / 손익 / 일마감 / 절도
-- 발주에서 신규 상품 직접 입력 및 자동 생성
-- 입고 자동 연결
-- 입고수량 자동 채움 + 수동 수정
-- 발주에서 유통기한 제거, 입고에서만 유통기한 입력
-- 유통기한 임박/만료 경고
-- 전량 폐기
-- 부분 폐기 팝업
-- 부분 폐기 후 출고(폐기) 자동 생성 및 손익 반영
-- 수정 / 삭제 기능
+## 데이터 유지
+현재까지 입력한 실제 데이터는 브라우저 localStorage에 저장되어 있으므로
+기존 앱에서 전체 백업(JSON) 후 새 버전에서 백업 불러오기를 사용하면 이어서 사용할 수 있습니다.
+
+## 참고
+이 버전은 '어제까지 사용하던 파일 형태'에 맞춘 실행형 버전입니다.
